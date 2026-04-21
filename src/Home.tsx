@@ -50,7 +50,10 @@ export default function Home() {
           <li>
             各行にメンバーのAtCoderIDを入力
             <br />
-            <a href="https://gist.github.com/Attsu-dev/0c3b58a297417e2ee64bf182aec22f91" className="text-blue-500 underline text-sm">
+            <a
+              href="https://gist.github.com/Attsu-dev/0c3b58a297417e2ee64bf182aec22f91"
+              className="text-blue-500 underline text-sm"
+            >
               例を見る
             </a>
           </li>
@@ -67,7 +70,10 @@ export default function Home() {
                 placeholder="https://gist.github.com/username/gistid"
                 className="flex-1 border rounded px-3 py-2"
               />
-              <button onClick={generateUrl} className="bg-blue-500 text-white px-4 py-2 rounded">
+              <button
+                onClick={generateUrl}
+                className="bg-blue-500 text-white px-4 py-2 rounded"
+              >
                 URLを生成
               </button>
             </div>
