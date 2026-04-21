@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function Tutorial() {
+export default function Home() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
 
