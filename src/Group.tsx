@@ -13,17 +13,25 @@ export default function Group() {
 
       if (!rawUrl) {
         const res = await fetch(`https://api.github.com/gists/${gistId}`);
+        if (!res.ok) {
+          alert("Gistの取得に失敗しました");
+          return;
+        }
         const data = await res.json();
 
         rawUrl = Object.values<any>(data.files)[0].raw_url;
         if (!rawUrl) {
-          alert("Gistの取得に失敗しました");
+          alert("Gistの内容が正しくありません");
           return;
         }
+
+        rawUrl = rawUrl.split("/raw/")[0] + "/raw/";
         localStorage.setItem(gistId, rawUrl);
       }
 
-      const text = await fetch(rawUrl).then((r) => r.text());
+      const text = await fetch(rawUrl + "?t=" + Date.now()).then((r) =>
+        r.text(),
+      );
 
       setList(
         Array.from(
