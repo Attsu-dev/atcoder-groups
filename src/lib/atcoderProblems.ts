@@ -1,5 +1,3 @@
-const ATCODER_PROBLEMS_API_BASE = "https://kenkoooo.com/atcoder-api/v3";
-
 type UserAcRankResponse = {
   count?: unknown;
   rank?: unknown;
@@ -19,12 +17,27 @@ export async function fetchGroupAcRanks(
 }
 
 export async function fetchUserAcRank(userId: string): Promise<AcRankSummary> {
-  const params = new URLSearchParams({ user: userId });
-  const res = await fetch(
-    `${ATCODER_PROBLEMS_API_BASE}/user/ac_rank?${params.toString()}`,
-  );
+  try {
+    const params = new URLSearchParams({ user: userId });
+    const res = await fetch(`/api/ac-rank?${params.toString()}`);
 
-  if (!res.ok) {
+    if (!res.ok) {
+      return {
+        userId,
+        acCount: null,
+        rank: null,
+        error: "AC数を取得できませんでした",
+      };
+    }
+
+    const data = (await res.json()) as UserAcRankResponse;
+
+    return {
+      userId,
+      acCount: toNumberOrNull(data.count),
+      rank: toNumberOrNull(data.rank),
+    };
+  } catch {
     return {
       userId,
       acCount: null,
@@ -32,14 +45,6 @@ export async function fetchUserAcRank(userId: string): Promise<AcRankSummary> {
       error: "AC数を取得できませんでした",
     };
   }
-
-  const data = (await res.json()) as UserAcRankResponse;
-
-  return {
-    userId,
-    acCount: toNumberOrNull(data.count),
-    rank: toNumberOrNull(data.rank),
-  };
 }
 
 export function sortAcRankSummaries(

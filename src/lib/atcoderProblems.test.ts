@@ -1,5 +1,41 @@
-import { describe, expect, it } from "vitest";
-import { sortAcRankSummaries, type AcRankSummary } from "./atcoderProblems";
+import { afterEach, describe, expect, it, vi } from "vitest";
+import {
+  fetchUserAcRank,
+  sortAcRankSummaries,
+  type AcRankSummary,
+} from "./atcoderProblems";
+
+afterEach(() => {
+  vi.restoreAllMocks();
+});
+
+describe("fetchUserAcRank", () => {
+  it("fetches AC count from AtCoder Problems API", async () => {
+    const fetchMock = vi.spyOn(globalThis, "fetch").mockResolvedValue({
+      ok: true,
+      json: async () => ({ count: 1234, rank: 56 }),
+    } as Response);
+
+    await expect(fetchUserAcRank("kenkoooo")).resolves.toEqual({
+      userId: "kenkoooo",
+      acCount: 1234,
+      rank: 56,
+    });
+
+    expect(fetchMock).toHaveBeenCalledWith("/api/ac-rank?user=kenkoooo");
+  });
+
+  it("returns an error summary when the request fails", async () => {
+    vi.spyOn(globalThis, "fetch").mockRejectedValue(new Error("Network error"));
+
+    await expect(fetchUserAcRank("kenkoooo")).resolves.toEqual({
+      userId: "kenkoooo",
+      acCount: null,
+      rank: null,
+      error: "AC数を取得できませんでした",
+    });
+  });
+});
 
 describe("sortAcRankSummaries", () => {
   it("sorts users by AC count descending", () => {

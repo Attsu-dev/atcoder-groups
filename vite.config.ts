@@ -9,4 +9,20 @@ export default defineConfig({
     react(),tailwindcss(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  server: {
+    proxy: {
+      '/api/ac-rank': {
+        target: 'https://kenkoooo.com/atcoder',
+        changeOrigin: true,
+        rewrite: (path) =>
+          path.replace(/^\/api\/ac-rank/, '/atcoder-api/v3/user/ac_rank'),
+        configure: (proxy) => {
+          proxy.on('proxyReq', (proxyReq) => {
+            proxyReq.removeHeader('origin')
+            proxyReq.removeHeader('referer')
+          })
+        },
+      },
+    },
+  },
 })

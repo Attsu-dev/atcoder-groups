@@ -1,5 +1,9 @@
 {
   "rewrites": [
+    {
+      "source": "/atcoder-api/(.*)",
+      "destination": "https://kenkoooo.com/atcoder/atcoder-api/$1"
+    },
     { "source": "/(.*)", "destination": "/" }
   ]
 }
