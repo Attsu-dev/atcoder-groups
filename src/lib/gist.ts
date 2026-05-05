@@ -49,7 +49,7 @@ async function fetchRawUrl(gistId: string): Promise<string> {
   return rawUrl.split("/raw/")[0] + "/raw/";
 }
 
-function parseMemberIds(text: string): string[] {
+export function parseMemberIds(text: string): string[] {
   return Array.from(
     new Set(
       text
