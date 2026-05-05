@@ -1,22 +1,20 @@
 import { useState } from "react";
+import { extractGistId } from "../lib/url";
 
 export default function Home() {
   const [input, setInput] = useState("");
   const [result, setResult] = useState("");
+  const generatedUrl = result.startsWith(window.location.origin);
 
   const generateUrl = () => {
-    const match = input.match(/gist\.github\.com\/[^/]+\/([a-zA-Z0-9]+)/);
+    const gistId = extractGistId(input);
 
-    if (!match) {
+    if (!gistId) {
       setResult("URLが正しくありません");
       return;
     }
 
-    const gistId = match[1];
-
-    const url = `${window.location.origin}/${gistId}`;
-
-    setResult(url);
+    setResult(`${window.location.origin}/${gistId}`);
   };
 
   return (
@@ -87,9 +85,9 @@ export default function Home() {
               </div>
               <button
                 onClick={() => window.open(result, "_blank")}
-                disabled={!result}
+                disabled={!generatedUrl}
                 className={`px-4 py-2 rounded whitespace-nowrap ${
-                  result
+                  generatedUrl
                     ? "bg-blue-500 text-white"
                     : "bg-gray-300 text-gray-500 cursor-not-allowed"
                 }`}
